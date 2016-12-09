@@ -3,7 +3,7 @@
 #
 
 FROM debian:jessie
-MAINTAINER kev <noreply@datageek.info>
+MAINTAINER replicator <replicator@welsmann.com>
 
 ENV DNS_VER 1.3.2
 ENV DNS_URL https://github.com/clowwindy/ChinaDNS/releases/download/${DNS_VER}/chinadns-${DNS_VER}.tar.gz
@@ -11,7 +11,7 @@ ENV DNS_FILE chinadns.tar.gz
 ENV DNS_MD5 f3ece30f2a453d25cc22ef6e1ef579b0
 
 RUN apt-get update \
-    && apt-get install -y build-essential curl dnsmasq supervisor \
+    && apt-get install -y build-essential curl dnsmasq supervisor nano \
     && mkdir chinadns \
         && cd chinadns \
         && curl -sSL ${DNS_URL} -o ${DNS_FILE} \
@@ -20,10 +20,7 @@ RUN apt-get update \
         && ./configure \
         && make install \
         && cd .. \
-        && rm -rf chinadns \
-    && apt-get remove -y build-essential \
-    && apt-get autoremove -y \
-    && rm -rf /var/lib/apt/lists/*
+        && rm -rf chinadns
 
 RUN curl http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest \
         | grep ipv4 \
